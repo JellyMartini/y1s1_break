@@ -6,7 +6,7 @@ using UnityEngine;
 public class Player_Titanfall : MonoBehaviour
 {
     private CharacterController controller;
-    public float moveSpeed = 1f, jumpSpeed = 1f, gravitySpeed = -9.81f, wallLaunchSpeed = 100f, momentumDamp = -10f;
+    public static float moveSpeed = 10f, jumpSpeed = 10f, gravitySpeed = -20f, wallLaunchSpeed = 20f, momentumDamp = -20f, maxSpeed = 15f;
     public Vector3 momentum = Vector3.zero;
     public enum PlayerState {Ground, Wall_Left, Wall_Right, Jumping};
     public PlayerState currentPlayerState = PlayerState.Ground;
@@ -20,6 +20,7 @@ public class Player_Titanfall : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Driver_Titanfall.currentGameState != Driver_Titanfall.GameState.Play) return;
         // MOVEMENT
         float camY = Camera.main.transform.rotation.eulerAngles.y * Mathf.Deg2Rad;
         float camY_Cos = Mathf.Cos(camY);
@@ -56,6 +57,11 @@ public class Player_Titanfall : MonoBehaviour
         else momentum.z -= momentumDamp * Time.deltaTime;
 
         velocity += momentum;
+        if (velocity.magnitude > maxSpeed)
+        {
+            velocity.Normalize();
+            velocity *= maxSpeed;
+        }
         velocity *= Time.deltaTime;
         controller.Move(velocity);
         //Debug.Log(currentPlayerState);

@@ -15,7 +15,6 @@ public class Camera_Titanfall : MonoBehaviour
         targetRot = 0f;
         previousRot = 0f;
         lerpTime = 0f;
-        Cursor.lockState = CursorLockMode.Locked;
         Player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player_Titanfall>();
         previousPlayerState = Player.currentPlayerState;
         transform.rotation = Quaternion.identity;
@@ -24,8 +23,7 @@ public class Camera_Titanfall : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (transform.eulerAngles.y != Player.transform.eulerAngles.y)
-            transform.rotation = Quaternion.Euler(transform.eulerAngles.x, Player.transform.eulerAngles.y, transform.eulerAngles.z);
+        if (Driver_Titanfall.currentGameState != Driver_Titanfall.GameState.Play) return;
         transform.Rotate(Vector3.left * Input.GetAxis("Mouse Y") * camSpeed * Time.deltaTime, Space.Self);
         if (Player.currentPlayerState != previousPlayerState)
         {
