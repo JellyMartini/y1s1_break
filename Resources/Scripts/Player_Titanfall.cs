@@ -7,13 +7,14 @@ public class Player_Titanfall : MonoBehaviour
 {
     private CharacterController controller;
     public float moveSpeed = 1f, jumpSpeed = 1f, gravitySpeed = -9.81f, wallLaunchSpeed = 100f, momentumDamp = -10f;
-    private Vector3 momentum = Vector3.zero;
+    public Vector3 momentum = Vector3.zero;
     public enum PlayerState {Ground, Wall_Left, Wall_Right, Jumping};
     public PlayerState currentPlayerState = PlayerState.Ground;
     // Start is called before the first frame update
     void Start()
     {
         controller = GetComponent<CharacterController>();
+        transform.rotation = Quaternion.identity;
     }
 
     // Update is called once per frame
@@ -40,8 +41,12 @@ public class Player_Titanfall : MonoBehaviour
         if (Input.GetAxis("Jump") > 0 && currentPlayerState != PlayerState.Jumping)
         {
             momentum.y += jumpSpeed;
-            if (currentPlayerState == PlayerState.Wall_Left) momentum.x = wallLaunchSpeed;
-            else if (currentPlayerState == PlayerState.Wall_Right) momentum.x = -wallLaunchSpeed;
+            if (currentPlayerState == PlayerState.Wall_Left || currentPlayerState == PlayerState.Wall_Right)
+            {
+                if (currentPlayerState == PlayerState.Wall_Left) momentum.x = -wallLaunchSpeed;
+                else momentum.x = wallLaunchSpeed;
+                momentum.x *= Mathf.Sign((transform.eulerAngles.y + 90f) % 360 - 180f); 
+            }
             currentPlayerState = PlayerState.Jumping;
         }
         if (momentum.y > jumpSpeed) momentum.y = jumpSpeed;
@@ -56,6 +61,7 @@ public class Player_Titanfall : MonoBehaviour
         //Debug.Log(currentPlayerState);
         if (Input.GetKeyDown(KeyCode.E)) transform.rotation = Quaternion.identity;
         transform.Rotate(Vector3.up * Input.GetAxis("Mouse X") * Camera.main.GetComponent<Camera_Titanfall>().camSpeed * Time.deltaTime, Space.World);
+        //Debug.Log((transform.eulerAngles.y + 90f) % 360 - 180f);
     }
 
     void FixedUpdate()
@@ -86,5 +92,14 @@ public class Player_Titanfall : MonoBehaviour
         }
         else Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.left), Color.green);
         return false;
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        
+        controller.Move(new Vector3(0, 1, -49) - transform.position);
+        transform.rotation = Quaternion.identity;
+        Camera.main.transform.rotation = Quaternion.identity;
+        momentum = Vector3.zero;
     }
 }
