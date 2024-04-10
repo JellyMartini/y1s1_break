@@ -8,64 +8,71 @@ using UnityEngine.UI;
 
 public class UI_Titanfall : MonoBehaviour
 {
-    private Driver_Titanfall gameDriver;
+    // PRIVATE MEMBERS
+    private Player_Titanfall player;
     private Canvas canvas;
 
     void Awake()
     {
-        gameDriver = GetComponentInParent<Driver_Titanfall>();
+        /*---------------------------------------------------------------------------------------------------//
+                                                SEQUENCE BREAKDOWN
+        //---------------------------------------------------------------------------------------------------//
+        1. Grab the references for the Player as "player" and the Canvas as "canvas"
+        */
+        // 1.
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player_Titanfall>();
         canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
     }
+
     // Start is called before the first frame update
     void Start()
     {
+        /*---------------------------------------------------------------------------------------------------//
+                                                SEQUENCE BREAKDOWN
+        //---------------------------------------------------------------------------------------------------//
+        1. Grab the debug Input Fields for the Player properties
+        2. Create an array that contains the relevant Player properties in the same order as the corresponding Input Fields
+        3. Set the placeholder text of each Input Field to the corresponding Player property
+        */
+        // 1.
         GameObject[] paramFields = GameObject.FindGameObjectsWithTag("InputFields");
-        float[] paramValues = new float[6] {Player_Titanfall.moveSpeed, Player_Titanfall.jumpSpeed, Player_Titanfall.gravitySpeed,
-            Player_Titanfall.wallLaunchSpeed, Player_Titanfall.momentumDamp, Player_Titanfall.maxSpeed};
+        
+        // 2.
+        float[] paramValues = new float[7] {player.MoveSpeed, player.JumpSpeed, player.Gravity,
+            player.WallLaunchSpeed, player.MaxSpeed, player.Damp, player.wallDetectDist };
+        
+        // 3.
         for (int i = 0; i < paramFields.Length; i++) paramFields[i].GetComponentsInChildren<TMP_Text>()[0].text = paramValues[i].ToString();
     }
 
     // Update is called once per frame
     void Update()
     {
+        /*---------------------------------------------------------------------------------------------------//
+                                                SEQUENCE BREAKDOWN
+        //---------------------------------------------------------------------------------------------------//
+        1. Show and allow interactions to the Canvas dependent on the Game State
+        */
+        // 1.
         if (Driver_Titanfall.currentGameState == Driver_Titanfall.GameState.Pause) canvas.enabled = true;
         else canvas.enabled = false;
-        
     }
 
-    public void UpdateCamSpeed(Slider camSpeedSlider)
-    {
-        Debug.Log("CamSpeedSlider changed");
-        Camera.main.GetComponent<Camera_Titanfall>().camSpeed = camSpeedSlider.value;
-    }
+    // PUBLICLY ACCESSIBLE FUNCTIONS FOR UPDATING CAMERA PROPERTIES
+    public void UpdateCamSpeed(Slider camSpeedSlider) { Camera.main.GetComponent<Camera_Titanfall>().CamSpeed = camSpeedSlider.value; }
 
-    public void UpdateMoveSpeed(string _moveSpeed)
-    {
-        Player_Titanfall.moveSpeed = float.Parse(_moveSpeed);
-    }
+    // PUBLICLY ACCESSIBLE FUNCTIONS FOR UPDATING PLAYER PROPERTIES
+    public void UpdateMoveSpeed(string _moveSpeed) { player.MoveSpeed = float.Parse(_moveSpeed); }
 
-    public void UpdateJumpSpeed(string _jumpSpeed)
-    {
-        Player_Titanfall.jumpSpeed = float.Parse(_jumpSpeed);
-    }
+    public void UpdateJumpSpeed(string _jumpSpeed) { player.JumpSpeed = float.Parse(_jumpSpeed); }
 
-    public void UpdateGravitySpeed(string _gravitySpeed)
-    {
-        Player_Titanfall.gravitySpeed = float.Parse(_gravitySpeed);
-    }
+    public void UpdatePlayerGravity(string _gravity) { player.Gravity = float.Parse(_gravity); }
 
-    public void UpdateWallLaunchSpeed(string _wallLaunchSpeed)
-    {
-        Player_Titanfall.wallLaunchSpeed = float.Parse(_wallLaunchSpeed);
-    }
+    public void UpdateWallLaunchSpeed(string _wallLaunchSpeed) { player.WallLaunchSpeed = float.Parse(_wallLaunchSpeed); }
 
-    public void UpdateMomentumDamp(string _momentumDamp)
-    {
-        Player_Titanfall.momentumDamp = float.Parse(_momentumDamp);
-    }
+    public void UpdateMaxSpeed(string _maxSpeed) { player.MaxSpeed = float.Parse(_maxSpeed); }
 
-    public void UpdateMaxSpeed(string _maxSpeed)
-    {
-        Player_Titanfall.maxSpeed = float.Parse(_maxSpeed);
-    }
+    public void UpdateDamp(string _damp) { player.Damp = float.Parse(_damp); }
+
+    public void UpdateWallDetectDist(string _wallDetectDist) { player.wallDetectDist = float.Parse(_wallDetectDist); }
 }
