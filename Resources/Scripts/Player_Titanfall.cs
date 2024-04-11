@@ -37,7 +37,7 @@ public class Player_Titanfall : MonoBehaviour
         // 1.
         controller = GetComponent<CharacterController>();
         // 2.
-        layerMaskDefault = ~LayerMask.GetMask("Player");
+        layerMaskDefault = ~LayerMask.GetMask("Player", "Ignore Raycast");
         // 3.
         wallDetectDist = 2f;
         // 4.
