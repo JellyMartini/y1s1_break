@@ -39,14 +39,14 @@ public class Player_Titanfall : MonoBehaviour
         // 2.
         layerMaskDefault = ~LayerMask.GetMask("Player", "Ignore Raycast");
         // 3.
-        wallDetectDist = 2f;
+        wallDetectDist = 0.7f;
         // 4.
         MoveSpeed = 10f;
         JumpSpeed = 10f;
         Gravity = -20f;
         WallLaunchSpeed = 20f;
         MaxSpeed = 15f;
-        Damp = -20f;
+        Damp = -30f;
         Momentum = Vector3.zero;
         CurrentPlayerState = PlayerState.Ground;
         

@@ -42,7 +42,16 @@ public class UI_Titanfall : MonoBehaviour
             player.WallLaunchSpeed, player.MaxSpeed, player.Damp, player.wallDetectDist };
         
         // 3.
-        for (int i = 0; i < paramFields.Length; i++) paramFields[i].GetComponentsInChildren<TMP_Text>()[0].text = paramValues[i].ToString();
+        foreach (var paramField in GameObject.FindGameObjectsWithTag("InputFields")) // Unity is real weird about grabbing stuff in order, so you have to verify
+        {
+            if (paramField.name == "MoveSpeedInputField") paramField.GetComponent<TMP_InputField>().text = paramValues[0].ToString();
+            else if (paramField.name == "JumpSpeedInputField") paramField.GetComponent<TMP_InputField>().text = paramValues[1].ToString();
+            else if (paramField.name == "GravityInputField") paramField.GetComponent<TMP_InputField>().text = paramValues[2].ToString();
+            else if (paramField.name == "WallLaunchSpeedInputField") paramField.GetComponent<TMP_InputField>().text = paramValues[3].ToString();
+            else if (paramField.name == "MaxSpeedInputField") paramField.GetComponent<TMP_InputField>().text = paramValues[4].ToString();
+            else if (paramField.name == "MomentumDampInputField") paramField.GetComponent<TMP_InputField>().text = paramValues[5].ToString();
+            else if (paramField.name == "WallDetectDistInputField") paramField.GetComponent<TMP_InputField>().text = paramValues[6].ToString();
+        }
     }
 
     // Update is called once per frame
