@@ -8,7 +8,7 @@ Textures will be stored in a collaborative OneDrive folder, not the git repo, so
 
 **DO NOT DELETE .keep**
 
-# How to Get
+# How to Get the Repo on Your Computer
 Create an empty Unity Project. Name it whatever you want.
 
 If the project opens, close it.
